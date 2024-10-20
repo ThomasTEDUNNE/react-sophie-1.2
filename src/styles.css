@@ -1,0 +1,195 @@
+.container {
+  width: 95%; /* Utilise toute la largeur disponible */
+  max-width: 2000px; /* Limite la largeur maximale à 1200px (ajuste selon tes besoins) */
+  margin: 50px auto; /* Centre le contenu avec un espace autour */
+  padding: 20px; /* Espacement interne pour donner du confort */
+  background-color: #ffffff; /* Fond blanc pour un effet de carte */
+  border-radius: 12px; /* Coins arrondis */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce pour l'effet de carte flottante */
+  border: 1px solid #e0e0e0; /* Bordure légère pour renforcer la séparation */
+  overflow: hidden; /* Cache tout débordement de contenu */
+}
+
+.initialization-section {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.import-container {
+  margin: 10px 0;
+}
+
+.table-section {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.evaluation-container,
+.table-container {
+  flex: 1;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+h2,
+h3 {
+  text-align: center;
+}
+
+textarea {
+  width: 100%;
+  margin: 10px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #e0e0e0; /* Bordure légère */
+  padding: 10px; /* Espacement interne */
+  text-align: left; /* Alignement du texte */
+}
+
+th {
+  background-color: #f5f5f5; /* Fond pour les en-têtes */
+}
+
+button {
+  background-color: #007bff; /* Couleur de fond */
+  color: white; /* Couleur du texte */
+  border: none; /* Pas de bordure */
+  border-radius: 5px; /* Coins arrondis */
+  padding: 10px 15px; /* Espacement interne */
+  margin: 10px; /* Espacement externe */
+  cursor: pointer; /* Curseur en main au survol */
+  transition: background-color 0.3s; /* Animation au survol */
+}
+
+button:hover {
+  background-color: #0056b3; /* Couleur au survol */
+}
+
+.tooltip {
+  position: absolute; /* Positionnement absolu pour le tooltip */
+  background-color: #ffffff; /* Fond blanc */
+  border: 1px solid #e0e0e0; /* Bordure légère */
+  border-radius: 5px; /* Coins arrondis */
+  padding: 10px; /* Espacement interne */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombre douce */
+}
+.import-text-container {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.checkbox {
+  width: 25px; /* Ajustez cette valeur selon vos besoins */
+  height: 25px; /* Ajustez cette valeur selon vos besoins */
+  cursor: pointer; /* Change le curseur pour indiquer que c'est cliquable */
+}
+
+h1 {
+  background-color: #2196f3; /* Couleur principale plus douce de Material UI */
+  color: white; /* Texte en blanc */
+  border: none; /* Pas de bordure */
+  border-radius: 8px; /* Coins arrondis mais plus subtils */
+  padding: 16px 10%; /* Espacement interne ajusté pour un look plus léger */
+  margin: 20px auto; /* Centrage horizontal avec auto */
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out; /* Transition plus fluide */
+  font-family: "Roboto", sans-serif; /* Utilisation de la police Roboto, standard dans Material UI */
+  font-size: 2rem; /* Taille légèrement réduite pour un style plus élégant */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); /* Ombre douce pour effet de profondeur */
+  max-width: 90%; /* Limite la largeur pour qu'il ne prenne pas trop de place sur l'écran */
+  text-align: center; /* Centrage du texte */
+}
+
+h1:hover {
+  background-color: #1976d2; /* Couleur Material UI au survol */
+  transform: translateY(
+    -3px
+  ); /* Légère élévation au survol pour l'effet de carte Material */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Ombre plus marquée pour l'effet d'élévation */
+}
+
+.main-title {
+  background-color: #2196f3; /* Couleur principale Material UI */
+  color: white; /* Texte en blanc */
+  border: none; /* Pas de bordure */
+  border-radius: 8px; /* Coins arrondis subtils */
+  padding: 16px 10%; /* Espacement interne généreux */
+  margin: 20px auto; /* Centrage horizontal avec auto */
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out; /* Transitions fluides */
+  font-family: "Roboto", sans-serif; /* Police Material UI */
+  font-size: 2.5rem; /* Taille pour le titre principal */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); /* Ombre douce */
+  text-align: center; /* Centrage du texte */
+}
+
+.main-title:hover {
+  background-color: #1976d2; /* Changement de couleur au survol */
+  transform: translateY(-3px); /* Légère élévation au survol */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+}
+
+.sub-title {
+  color: #1976d2; /* Couleur bleu plus foncée pour un contraste subtil */
+  font-family: "Roboto", sans-serif; /* Même police pour la cohérence */
+  font-size: 1.25rem; /* Taille plus petite pour le sous-titre */
+  text-align: center; /* Centrage du sous-titre */
+  margin-top: -10px; /* Réduction de l'espacement entre le titre et le sous-titre */
+  font-weight: 300; /* Poids de la police plus léger pour un contraste avec le titre principal */
+  letter-spacing: 1px; /* Espacement des lettres pour améliorer la lisibilité */
+}
+
+/* Style du texte à l'intérieur */
+h1.main-title,
+h2.sub-title,
+p {
+  margin: 0; /* Supprime les marges externes pour éviter les débordements */
+}
+
+/* Espacement entre les différentes sections du texte */
+p {
+  margin-top: 20px; /* Ajoute de l'espace entre les paragraphes */
+}
+
+h1.main-title {
+  margin-bottom: 10px; /* Espace sous le titre principal */
+}
+
+h2.sub-title {
+  margin-bottom: 30px; /* Espace sous le sous-titre */
+}
+.reset-button {
+  margin-top: 40px; /* Espace au-dessus du bouton Réinitialiser */
+  margin-left: 20%; /* Espace au-dessus du bouton Réinitialiser */
+  padding: 10px 20px; /* Espacement interne */
+  background-color: #f44336; /* Couleur rouge */
+  color: white; /* Texte blanc */
+  border: none; /* Pas de bordure */
+  border-radius: 5px; /* Coins arrondis */
+  cursor: pointer; /* Curseur en main au survol */
+  transition: background-color 0.3s; /* Animation au survol */
+}

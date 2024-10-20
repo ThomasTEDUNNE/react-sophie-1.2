@@ -1,0 +1,38 @@
+{
+  "name": "react",
+  "home": "https://thomastedunne.github.io/react-test-sophie",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "papaparse": "^5.4.1",
+    "@mui/material": "^6.1.4",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "react-csv": "^2.2.2",
+    "yart": "0.1.0",
+    "gh-pages-auto-release": "1.1.369",
+    "gh-pages": "6.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.38",
+    "@types/react-dom": "^18.2.15",
+    "loader-utils": "^3.2.1",
+    "typescript": "^4.9.5"
+  },
+  "scripts": {
+    "start": "npx react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT"
+}
