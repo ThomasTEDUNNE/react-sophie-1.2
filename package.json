@@ -14,7 +14,6 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "react-csv": "^2.2.2",
-    "yart": "0.1.0",
     "gh-pages-auto-release": "1.1.369",
     "gh-pages": "6.2.0"
   },
