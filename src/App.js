@@ -238,7 +238,7 @@ function App() {
             spécifique. Vous pouvez télécharger un modèle ici qui est un exemple
             d'evaluation pour le HTML:{" "}
             <a
-              href="https://drive.google.com/file/d/1AoN9RwMBNFN9eSRQ_706gI02NWvkfNfR/view?usp=sharing"
+              href="https://drive.google.com/uc?export=download&id=1AoN9RwMBNFN9eSRQ_706gI02NWvkfNfR"
               target="_blank"
             rel="noopener noreferrer"
           >
