@@ -235,8 +235,8 @@ function App() {
         <h3>Étape 1 : Préparer un fichier .csv</h3>
         <p>
           Pour utiliser SOPHIE, il vous faut un fichier .csv d'un format
-            spécifique. Vous pouvez télécharger un modèle ici qui un exemple
-            d'evluation pour le HTML:{" "}
+            spécifique. Vous pouvez télécharger un modèle ici qui est un exemple
+            d'evaluation pour le HTML:{" "}
             <a
               href="https://drive.google.com/file/d/1AoN9RwMBNFN9eSRQ_706gI02NWvkfNfR/view?usp=sharing"
               target="_blank"
