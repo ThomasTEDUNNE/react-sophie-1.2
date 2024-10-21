@@ -260,7 +260,8 @@ function App() {
             type : Question;Coefficient;0pt;1pt;2pt;3pt."
           </em>
           <br />
-          Accédez à ChatGPT ici :{" "}
+          N'ouvliez pas de joindre votre évaluation en .pdf à ChatGPT. 
+            <br /> Accédez à ChatGPT ici :{" "}
           <a
             href="https://chat.openai.com/"
             target="_blank"
