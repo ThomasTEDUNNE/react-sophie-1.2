@@ -173,10 +173,19 @@ function App() {
         exportContent += `${student};${question};${note};${competence}\n`;
       });
     });
+    //Telechargement du Fichier CSV
+    const blob = new Blob([exportContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "evaluation.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     setExportData(exportContent);
     alert(
-      "Données prêtes à être copiées. Elles sont en dessous du tableau note."
+      "Les données vont être téléchargées. Si cela ne fonctionne pas, elles sont mises à disposition dans une zone de texte en dessous du tableau de notes."
     );
 
     // Scroller vers le bas de la page après l'exportation
@@ -216,130 +225,154 @@ function App() {
 
   return (
     <div className="container">
-    <h1 className="main-title">SOPHIE</h1>
-    <h2 className="sub-title">
-      Système Optimisé Pour Harmoniser les Interactions Éducatives
-    </h2>
+      <h1 className="main-title">SOPHIE</h1>
+      <h2 className="sub-title">
+        Système Optimisé Pour Harmoniser les Interactions Éducatives
+      </h2>
 
-    {/* Flèche pour afficher/masquer le tutoriel */}
-    <div
-      onClick={toggleTutorial}
-      style={{ cursor: "pointer", marginTop: "20px", fontSize: "1.5rem" }}
-    >
-      {showTutorial ? "▼ Masquer le tutoriel" : "▶ Voir le tutoriel"}
-    </div>
+      {/* Flèche pour afficher/masquer le tutoriel */}
+      <div
+        onClick={toggleTutorial}
+        style={{ cursor: "pointer", marginTop: "20px", fontSize: "1.5rem" }}
+      >
+        {showTutorial ? "▼ Masquer le tutoriel" : "▶ Voir le tutoriel"}
+      </div>
 
-    {/* Contenu du tutoriel qui s'affiche/masque selon l'état */}
-    {showTutorial && (
-      <div style={{ marginTop: "20px" }}>
-        <h3>Étape 1 : Préparer un fichier .csv</h3>
-        <p>
-          Pour utiliser SOPHIE, il vous faut un fichier .csv d'un format
+      {/* Contenu du tutoriel qui s'affiche/masque selon l'état */}
+      {showTutorial && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Étape 1 : Préparer un fichier .csv</h3>
+          <p>
+            Pour utiliser SOPHIE, il vous faut un fichier .csv d'un format
             spécifique. Vous pouvez télécharger un modèle ici qui est un exemple
             d'evaluation pour le HTML:{" "}
             <a
               href="https://drive.google.com/uc?export=download&id=1AoN9RwMBNFN9eSRQ_706gI02NWvkfNfR"
               target="_blank"
-            rel="noopener noreferrer"
-          >
-            Télécharger le modèle de fichier .csv
-          </a>
-          .
-          <br />
-          Ouvrez le fichier avec Excel ou Google Sheets pour le personnaliser.
-        </p>
+              rel="noopener noreferrer"
+            >
+              Télécharger le modèle de fichier .csv
+            </a>
+            .
+            <br />
+            Ouvrez le fichier avec Excel ou Google Sheets pour le personnaliser.
+          </p>
 
-        <h3>Étape 2 : Créer vos descripteurs</h3>
-        <p>
-          Utilisez vos descripteurs en les complétents dans le fichier .csv [format:Question;Coefficient;0;1;2;3.], ou utilisez ChatGPT pour créer les descripteurs. Voici un prompt à
-          utiliser :
-          <br />
-          <em>
-            "Voici mon évaluation, écris-moi les descripteurs par question de
-            0 à 3. Attention, je souhaite que tu me l'écrives en .csv de ce
-            type : Question;Coefficient;0pt;1pt;2pt;3pt."
-          </em>
-          <br />
-          N'ouvliez pas de joindre votre évaluation en .pdf à ChatGPT. 
+          <h3>Étape 2 : Créer vos descripteurs</h3>
+          <p>
+            Utilisez vos descripteurs en les complétents dans le fichier .csv
+            [format:Question;Coefficient;0;1;2;3.], ou utilisez ChatGPT pour
+            créer les descripteurs. Voici un prompt à utiliser :
+            <br />
+            <em>
+              "Voici mon évaluation, écris-moi les descripteurs par question de
+              0 à 3. Attention, je souhaite que tu me l'écrives en .csv de ce
+              type : Question;Coefficient;0pt;1pt;2pt;3pt."
+            </em>
+            <br />
+            N'ouvliez pas de joindre votre évaluation en .pdf à ChatGPT.
             <br /> Accédez à ChatGPT ici :{" "}
-          <a
-            href="https://chat.openai.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ChatGPT
-          </a>
-          .
-        </p>
+            <a
+              href="https://chat.openai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ChatGPT
+            </a>
+            .
+          </p>
 
-        <h3>Étape 3 : Modifier votre fichier .csv</h3>
-        <p>
-          Vous pouvez ajuster les coefficients des questions en modifiant la
-          deuxième colonne du fichier .csv généré.
-        </p>
+          <h4>Transformation des données de l'IA en .csv</h4>
+          <p>
+            Une fois que vous avez obtenu les descripteurs de ChatGPT, suivez
+            ces étapes pour les transformer en un fichier .csv :
+            <br />
+            1. Copiez les données .csv fournies par l'IA.
+            <br />
+            2. Accédez à ce lien :{" "}
+            <a
+              href="https://sites.google.com/beeprof.fr/sophie/accueil/texte-csv?authuser=0"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Text-csv
+            </a>
+            .
+            <br />
+            3. Collez les données copiées dans la zone de texte prévue à cet
+            effet.
+            <br />
+            4. Suivez les instructions sur la page pour créer votre fichier .csv
+            automatiquement.
+          </p>
+          <h3>Étape 3 : Modifier votre fichier .csv</h3>
+          <p>
+            Vous pouvez ajuster les coefficients des questions en modifiant la
+            deuxième colonne du fichier .csv généré.
+          </p>
 
-        <h3>Étape 4 : Importer le fichier dans SOPHIE</h3>
-        <p>
-          Une fois votre fichier prêt, importez-le via le bouton{" "}
-          <strong>"Choisir un fichier"</strong> dans SOPHIE.
-        </p>
+          <h3>Étape 4 : Importer le fichier dans SOPHIE</h3>
+          <p>
+            Une fois votre fichier prêt, importez-le via le bouton{" "}
+            <strong>"Choisir un fichier"</strong> dans SOPHIE.
+          </p>
 
-        <h3>Étape 5 : Copier les listes d’élèves via Pronote</h3>
-        <p>
-          Si vous utilisez Pronote Client (non WEB), suivez ces étapes :
-          <ol>
-            <li>Créez une nouvelle évaluation (Note ou Compétence).</li>
-            <li>Cliquez sur "Liste" en haut du tableau d'évaluation.</li>
-            <li>
-              Sélectionnez l'icône "copier" pour copier les informations dans
-              votre presse-papiers.
-            </li>
-          </ol>
-          Vous pouvez aussi suivre cette{" "}
-          <a
-            href="https://drive.google.com/file/d/1NEUxE8jxJmAhFqdrUPIpvbCIZ_O2UNkj/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            démonstration visuelle sous forme de GIF
-          </a>
-          .
-        </p>
+          <h3>Étape 5 : Copier les listes d’élèves via Pronote</h3>
+          <p>
+            Si vous utilisez Pronote Client (non WEB), suivez ces étapes :
+            <ol>
+              <li>Créez une nouvelle évaluation (Note ou Compétence).</li>
+              <li>Cliquez sur "Liste" en haut du tableau d'évaluation.</li>
+              <li>
+                Sélectionnez l'icône "copier" pour copier les informations dans
+                votre presse-papiers.
+              </li>
+            </ol>
+            Vous pouvez aussi suivre cette{" "}
+            <a
+              href="https://drive.google.com/file/d/1NEUxE8jxJmAhFqdrUPIpvbCIZ_O2UNkj/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              démonstration visuelle sous forme de GIF
+            </a>
+            .
+          </p>
 
-        <h3>Étape 6 : Coller les listes dans SOPHIE</h3>
-        <p>Collez vos listes dans la zone de texte prévue à cet effet.</p>
+          <h3>Étape 6 : Coller les listes dans SOPHIE</h3>
+          <p>Collez vos listes dans la zone de texte prévue à cet effet.</p>
 
-        <h3>Étape 7 : Évaluation des élèves</h3>
-        <p>
-          <ol>
-            <li>
-              Utilisez le menu déroulant pour choisir l’élève à évaluer.
-            </li>
-            <li>
-              Un tableau apparaîtra avec les questions. Survolez la question
-              avec la souris pour voir les descripteurs.
-            </li>
-          </ol>
-        </p>
+          <h3>Étape 7 : Évaluation des élèves</h3>
+          <p>
+            <ol>
+              <li>
+                Utilisez le menu déroulant pour choisir l’élève à évaluer.
+              </li>
+              <li>
+                Un tableau apparaîtra avec les questions. Survolez la question
+                avec la souris pour voir les descripteurs.
+              </li>
+            </ol>
+          </p>
 
-        <h3>Étape 8 : Exporter les résultats</h3>
-        <p>
-          Une fois l’évaluation terminée, vous pouvez copier les notes dans
-          Pronote (Notes uniquement) ou exporter les résultats. Les
-          informations seront copiées au format suivant :{" "}
-          <strong>Élève;Question;Score;Compétence</strong>.
-        </p>
+          <h3>Étape 8 : Exporter les résultats</h3>
+          <p>
+            Une fois l’évaluation terminée, vous pouvez copier les notes dans
+            Pronote (Notes uniquement) ou exporter les résultats. Les
+            informations seront copiées au format suivant :{" "}
+            <strong>Élève;Question;Score;Compétence</strong>.
+          </p>
 
-        <p>
-          Si vous avez des questions ou des retours, n'hésitez pas à me
-          contacter à :{" "}
-          <a href="mailto:te-dunne.thomas@ac-poitiers.fr">
-            te-dunne.thomas@ac-poitiers.fr
-          </a>
-          .
-        </p>
-      </div>
-    )}
+          <p>
+            Si vous avez des questions ou des retours, n'hésitez pas à me
+            contacter à :{" "}
+            <a href="mailto:te-dunne.thomas@ac-poitiers.fr">
+              te-dunne.thomas@ac-poitiers.fr
+            </a>
+            .
+          </p>
+        </div>
+      )}
 
       <div className="container">
         <div className="import-button">
