@@ -378,13 +378,13 @@ function App() {
               </li>
             </ol>
             <p>
-              Pour mieux comprendre ce processus, voici un lien vers un{" "}
+              Pour mieux comprendre ce processus, voici un lien vers une{" "}
               <a
                 href="https://youtu.be/UGvQhq05JMA"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Vidéo explicatif
+                Vidéo explicative
               </a>{" "}
               illustrant les étapes.
             </p>
