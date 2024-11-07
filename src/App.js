@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Papa from "papaparse";
 import "./styles.css"; // Assurez-vous que ce fichier existe et contient vos styles
 
@@ -19,6 +19,7 @@ function App() {
   const [activeQuestion, setActiveQuestion] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showTutorialTwo, setShowTutorialTwo] = useState(false);
 
   // Fonction pour convertir une note en compétence
   const noteToCompetence = (note) => {
@@ -161,6 +162,9 @@ function App() {
   const toggleTutorial = () => {
     setShowTutorial(!showTutorial);
   };
+  const toggleTutorialTwo = () => {
+    setShowTutorialTwo(!showTutorialTwo);
+  };
 
   // Gère l'exportation des évaluations
   const handleExportEvaluation = () => {
@@ -173,10 +177,19 @@ function App() {
         exportContent += `${student};${question};${note};${competence}\n`;
       });
     });
+    //Telechargement du Fichier CSV
+    const blob = new Blob([exportContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "evaluation.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     setExportData(exportContent);
     alert(
-      "Données prêtes à être copiées. Elles sont en dessous du tableau note."
+      "Les données vont être téléchargées. Si cela ne fonctionne pas, elles sont mises à disposition dans une zone de texte en dessous du tableau de notes."
     );
 
     // Scroller vers le bas de la page après l'exportation
@@ -214,132 +227,276 @@ function App() {
     }
   };
 
+  // Fonction pour sauvegarder le travail actuel
+  const handleSaveProgress = () => {
+    const saveData = {
+      studentNames,
+      responses,
+      notes,
+      competences,
+    };
+
+    const file = new Blob([JSON.stringify(saveData, null, 2)], {
+      type: "application/json",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(file);
+    link.download = "sauvegarde.json";
+    link.click();
+  };
+
+  // Fonction pour charger une sauvegarde
+  const handleLoadProgress = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const saveData = JSON.parse(e.target.result);
+      setStudentNames(saveData.studentNames);
+      setResponses(saveData.responses);
+      setNotes(saveData.notes);
+      setCompetences(saveData.competences);
+
+      // Si la zone de texte de la liste des élèves est vide, on la remplit avec la liste chargée
+      if (
+        studentListRef.current &&
+        studentListRef.current.value.trim() === ""
+      ) {
+        // On crée une copie de la liste d'élèves
+        let studentList = saveData.studentNames.slice();
+
+        // Insérer "NOM" sur la première ligne et un saut de ligne
+        studentList.unshift("NOM"); // On ajoute "NOM" au début de la liste
+
+        // Ajouter les élèves après "NOM" et un retour à la ligne à la fin
+        let textToInsert = studentList.join("\n") + "\n"; // Ajouter un retour à la ligne après le dernier élève
+
+        // Remplir la zone de texte avec le texte formaté
+        studentListRef.current.value = textToInsert;
+
+        // Placer le curseur à la fin de la zone de texte
+        studentListRef.current.selectionStart =
+          studentListRef.current.selectionEnd = textToInsert.length;
+
+        // Simuler la pression de la touche "Entrée" (Retour à la ligne)
+        const event = new KeyboardEvent("keydown", {
+          key: "Enter",
+          code: "Enter",
+          keyCode: 13,
+          which: 13,
+          bubbles: true,
+        });
+
+        // Déclencher l'événement sur la zone de texte
+        studentListRef.current.dispatchEvent(event);
+      }
+    };
+
+    if (file) {
+      reader.readAsText(file);
+    }
+  };
+  // Crée un ref pour accéder à la zone de texte
+  const studentListRef = useRef(null);
+
+  // États pour gérer l'affichage de chaque section
+
+  // Fonctions pour afficher/masquer les sections
+
   return (
     <div className="container">
-    <h1 className="main-title">SOPHIE</h1>
-    <h2 className="sub-title">
-      Système Optimisé Pour Harmoniser les Interactions Éducatives
-    </h2>
+      <h1 className="main-title">SOPHIE</h1>
+      <h2 className="sub-title">
+        Système Optimisé Pour Harmoniser les Interactions Éducatives
+      </h2>
 
-    {/* Flèche pour afficher/masquer le tutoriel */}
-    <div
-      onClick={toggleTutorial}
-      style={{ cursor: "pointer", marginTop: "20px", fontSize: "1.5rem" }}
-    >
-      {showTutorial ? "▼ Masquer le tutoriel" : "▶ Voir le tutoriel"}
-    </div>
+      {/* Flèche pour afficher/masquer le tutoriel */}
+      <div
+        onClick={toggleTutorial}
+        style={{ cursor: "pointer", marginTop: "20px", fontSize: "1" }}
+      >
+        {showTutorial
+          ? "▼ Masquer le tutoriel"
+          : "▶ Voir le tutoriel de fonctionnement"}
+      </div>
 
-    {/* Contenu du tutoriel qui s'affiche/masque selon l'état */}
-    {showTutorial && (
-      <div style={{ marginTop: "20px" }}>
-        <h3>Étape 1 : Préparer un fichier .csv</h3>
-        <p>
-          Pour utiliser SOPHIE, il vous faut un fichier .csv d'un format
+      {/* Nouveau bouton Tutoriel 2 */}
+      <div
+        onClick={toggleTutorialTwo}
+        style={{
+          cursor: "pointer",
+          marginTop: "20px",
+          fontSize: "1",
+          display: "inline-block",
+        }}
+      >
+        {showTutorialTwo
+          ? "▼ Masquer le tutoriel"
+          : "▶ Voir le tutoriel pour Sauvegarde/Importer"}
+      </div>
+
+      {/* Contenu du Tutoriel 2 qui s'affiche/masque selon l'état */}
+      {showTutorialTwo && (
+        <div style={{ marginTop: "20px" }}>
+          <h2>Sauvegarde / Importer</h2>
+
+          <section>
+            <h3>Bouton Sauvegarde</h3>
+            <p>
+              Le bouton <strong>Sauvegarde</strong> vous permet de sauvegarder
+              votre travail. Cette action télécharge un document{" "}
+              <code>.json</code> contenant toutes les informations que vous avez
+              saisies dans <strong>SOPHIE</strong>. Ce fichier pourra être
+              utilisé ultérieurement pour restaurer vos données.
+            </p>
+          </section>
+
+          <section>
+            <h3>Bouton Importer Sauvegarde</h3>
+            <p>
+              Le bouton <strong>Importer Sauvegarde</strong> vous permet de
+              récupérer les données sauvegardées précédemment. Voici la
+              procédure à suivre :
+            </p>
+            <ol>
+              <li>
+                Importez d'abord votre évaluation via le champ{" "}
+                <strong>Importer évaluation</strong>.
+              </li>
+              <li>
+                Ensuite, cliquez sur <strong>Importer Sauvegarde</strong>.
+              </li>
+              <li>
+                Sélectionnez le fichier de sauvegarde{" "}
+                <code>suavegarde.json</code>.
+              </li>
+              <li>La liste des élèves sera importée.</li>
+              <li>
+                Cliquez sur la dernière ligne de la zone de texte et appuyez sur{" "}
+                <strong>Entrée</strong>. Cela affichera le tableau avec les
+                notes et les compétences.
+              </li>
+            </ol>
+            <p>
+              Pour mieux comprendre ce processus, voici un lien vers un{" "}
+              <a
+                href="https://youtu.be/UGvQhq05JMA"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Vidéo explicatif
+              </a>{" "}
+              illustrant les étapes.
+            </p>
+          </section>
+        </div>
+      )}
+
+      {/* Contenu du tutoriel qui s'affiche/masque selon l'état */}
+      {showTutorial && (
+        <div style={{ marginTop: "20px" }}>
+          <h2>Fonctionnement</h2>
+          <h3>Étape 1 : Préparer un fichier .csv</h3>
+          <p>
+            Pour utiliser SOPHIE, il vous faut un fichier .csv d'un format
             spécifique. Vous pouvez télécharger un modèle ici qui est un exemple
             d'evaluation pour le HTML:{" "}
             <a
               href="https://drive.google.com/uc?export=download&id=1AoN9RwMBNFN9eSRQ_706gI02NWvkfNfR"
               target="_blank"
-            rel="noopener noreferrer"
-          >
-            Télécharger le modèle de fichier .csv
-          </a>
-          .
-          <br />
-          Ouvrez le fichier avec Excel ou Google Sheets pour le personnaliser.
-        </p>
-
-        <h3>Étape 2 : Créer vos descripteurs</h3>
-        <p>
-          Utilisez vos descripteurs en les complétents dans le fichier .csv [format:Question;Coefficient;0;1;2;3.], ou utilisez ChatGPT pour créer les descripteurs. Voici un prompt à
-          utiliser :
-          <br />
-          <em>
-            "Voici mon évaluation, écris-moi les descripteurs par question de
-            0 à 3. Attention, je souhaite que tu me l'écrives en .csv de ce
-            type : Question;Coefficient;0pt;1pt;2pt;3pt."
-          </em>
-          <br />
-          N'ouvliez pas de joindre votre évaluation en .pdf à ChatGPT. 
+              rel="noopener noreferrer"
+            >
+              Télécharger le modèle de fichier .csv
+            </a>
+            .
+            <br />
+            Ouvrez le fichier avec Excel ou Google Sheets pour le personnaliser.
+          </p>
+          <h3>Étape 2 : Créer vos descripteurs</h3>
+          <p>
+            Utilisez vos descripteurs en les complétents dans le fichier .csv
+            [format:Question;Coefficient;0;1;2;3.], ou utilisez ChatGPT pour
+            créer les descripteurs. Voici un prompt à utiliser :
+            <br />
+            <em>
+              "Voici mon évaluation, écris-moi les descripteurs par question de
+              0 à 3. Attention, je souhaite que tu me l'écrives en .csv de ce
+              type : Question;Coefficient;0pt;1pt;2pt;3pt."
+            </em>
+            <br />
+            N'ouvliez pas de joindre votre évaluation en .pdf à ChatGPT.
             <br /> Accédez à ChatGPT ici :{" "}
-          <a
-            href="https://chat.openai.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ChatGPT
-          </a>
-          .
-        </p>
-
-        <h3>Étape 3 : Modifier votre fichier .csv</h3>
-        <p>
-          Vous pouvez ajuster les coefficients des questions en modifiant la
-          deuxième colonne du fichier .csv généré.
-        </p>
-
-        <h3>Étape 4 : Importer le fichier dans SOPHIE</h3>
-        <p>
-          Une fois votre fichier prêt, importez-le via le bouton{" "}
-          <strong>"Choisir un fichier"</strong> dans SOPHIE.
-        </p>
-
-        <h3>Étape 5 : Copier les listes d’élèves via Pronote</h3>
-        <p>
-          Si vous utilisez Pronote Client (non WEB), suivez ces étapes :
-          <ol>
-            <li>Créez une nouvelle évaluation (Note ou Compétence).</li>
-            <li>Cliquez sur "Liste" en haut du tableau d'évaluation.</li>
-            <li>
-              Sélectionnez l'icône "copier" pour copier les informations dans
-              votre presse-papiers.
-            </li>
-          </ol>
-          Vous pouvez aussi suivre cette{" "}
-          <a
-            href="https://drive.google.com/file/d/1NEUxE8jxJmAhFqdrUPIpvbCIZ_O2UNkj/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            démonstration visuelle sous forme de GIF
-          </a>
-          .
-        </p>
-
-        <h3>Étape 6 : Coller les listes dans SOPHIE</h3>
-        <p>Collez vos listes dans la zone de texte prévue à cet effet.</p>
-
-        <h3>Étape 7 : Évaluation des élèves</h3>
-        <p>
-          <ol>
-            <li>
-              Utilisez le menu déroulant pour choisir l’élève à évaluer.
-            </li>
-            <li>
-              Un tableau apparaîtra avec les questions. Survolez la question
-              avec la souris pour voir les descripteurs.
-            </li>
-          </ol>
-        </p>
-
-        <h3>Étape 8 : Exporter les résultats</h3>
-        <p>
-          Une fois l’évaluation terminée, vous pouvez copier les notes dans
-          Pronote (Notes uniquement) ou exporter les résultats. Les
-          informations seront copiées au format suivant :{" "}
-          <strong>Élève;Question;Score;Compétence</strong>.
-        </p>
-
-        <p>
-          Si vous avez des questions ou des retours, n'hésitez pas à me
-          contacter à :{" "}
-          <a href="mailto:te-dunne.thomas@ac-poitiers.fr">
-            te-dunne.thomas@ac-poitiers.fr
-          </a>
-          .
-        </p>
-      </div>
-    )}
+            <a
+              href="https://chat.openai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ChatGPT
+            </a>
+            .
+          </p>
+          <h3>Étape 3 : Modifier votre fichier .csv</h3>
+          <p>
+            Vous pouvez ajuster les coefficients des questions en modifiant la
+            deuxième colonne du fichier .csv généré.
+          </p>
+          <h3>Étape 4 : Importer le fichier dans SOPHIE</h3>
+          <p>
+            Une fois votre fichier prêt, importez-le via le bouton{" "}
+            <strong>"Choisir un fichier"</strong> dans SOPHIE.
+          </p>
+          <h3>Étape 5 : Copier les listes d’élèves via Pronote</h3>
+          <p>
+            Si vous utilisez Pronote Client (non WEB), suivez ces étapes :
+            <ol>
+              <li>Créez une nouvelle évaluation (Note ou Compétence).</li>
+              <li>Cliquez sur "Liste" en haut du tableau d'évaluation.</li>
+              <li>
+                Sélectionnez l'icône "copier" pour copier les informations dans
+                votre presse-papiers.
+              </li>
+            </ol>
+            Vous pouvez aussi suivre cette{" "}
+            <a
+              href="https://drive.google.com/file/d/1NEUxE8jxJmAhFqdrUPIpvbCIZ_O2UNkj/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              démonstration visuelle sous forme de GIF
+            </a>
+            .
+          </p>
+          <h3>Étape 6 : Coller les listes dans SOPHIE</h3>
+          <p>Collez vos listes dans la zone de texte prévue à cet effet.</p>
+          <h3>Étape 7 : Évaluation des élèves</h3>
+          <p>
+            <ol>
+              <li>
+                Utilisez le menu déroulant pour choisir l’élève à évaluer.
+              </li>
+              <li>
+                Un tableau apparaîtra avec les questions. Survolez la question
+                avec la souris pour voir les descripteurs.
+              </li>
+            </ol>
+          </p>
+          <h3>Étape 8 : Exporter les résultats</h3>
+          <p>
+            Une fois l’évaluation terminée, vous pouvez copier les notes dans
+            Pronote (Notes uniquement) ou exporter les résultats. Les
+            informations seront copiées au format suivant :{" "}
+            <strong>Élève;Question;Score;Compétence</strong>.
+          </p>
+          <p>
+            Si vous avez des questions ou des retours, n'hésitez pas à me
+            contacter à :{" "}
+            <a href="mailto:te-dunne.thomas@ac-poitiers.fr">
+              te-dunne.thomas@ac-poitiers.fr
+            </a>
+            .
+          </p>
+        </div>
+      )}
 
       <div className="container">
         <div className="import-button">
@@ -348,7 +505,11 @@ function App() {
             <input type="file" accept=".csv" onChange={handleImportEval} />
           </div>
           <h2>Collez la liste des élèves via Pronote</h2>
+          <button onClick={() => document.getElementById("load-file").click()}>
+            Importer Sauvegarde
+          </button>
           <textarea
+            ref={studentListRef}
             rows="10"
             cols="30"
             placeholder="Collez les données CSV ici"
@@ -373,7 +534,15 @@ function App() {
                 Réinitialiser l'évaluation
               </button>
             )}
+            <button onClick={handleSaveProgress}>Sauvegarder </button>
 
+            <input
+              type="file"
+              id="load-file"
+              accept=".json"
+              style={{ display: "none" }}
+              onChange={handleLoadProgress}
+            />
             {selectedStudent && (
               <div>
                 <h3>Évaluation pour {selectedStudent}</h3>
